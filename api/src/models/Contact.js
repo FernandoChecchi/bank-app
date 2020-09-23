@@ -18,6 +18,12 @@ module.exports = (sequelize) => {
         },
         nickName: {
             type: S.TEXT
+        },
+        email: {
+            type: S.TEXT
+        },
+        phoneNumber: {
+            type: S.BIGINT
         }
     })
 };

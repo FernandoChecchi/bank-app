@@ -1,0 +1,6 @@
+{
+  "name": "bank-app",
+  "dependencies": {
+    "@vercel/integration-utils": "latest"
+  }
+}

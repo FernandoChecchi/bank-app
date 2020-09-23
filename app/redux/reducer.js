@@ -1,19 +1,31 @@
 import * as cons from "./constants";
 
+///////>> STATE <</////
+const initialState = {
+  user: undefined,
+  transactions: {},
+  fullBalance: {},
+  contacts:[],
+  oneFriend: {}
+};
+
 ///////>> SUPPORTS <<////////
-const getBalance = (payload) => {
+const getBalance = (payload, user) => {
 
     var debit = 0;
     var credit = 0;  
 
+    console.log(user)
+
     for (var i in payload) {
-      if (payload[i].debit) {
+      console.log(payload[i])
+      if (payload[i].debit === user?.account.accountId) {
         debit += parseFloat(payload[i].value)
       } else {
         credit += parseFloat(payload[i].value)
       }
     }
-    
+
     return {
       debit: debit,
       credit: credit,
@@ -21,30 +33,9 @@ const getBalance = (payload) => {
     }
 }
 
-///////>> STATE <</////
-const initialState = {
-  user: undefined,
-  sendEmail: [],
-  code: false,
-  transactions: {},
-  fullBalance: {},
-  contacts:[]
-};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-//--------------------------------------------------------------//
-    ////>> REGISTER <</////
-    case cons.SEND_MAIL:
-      return {
-        ...state,
-        sendEmail: action.payload,
-      };
-    case cons.SEARCH_CODE:
-      return {
-        ...state,
-        code: action.payload,
-      };
 //--------------------------------------------------------------//
     /////>> LOGIN <</////
     case cons.GET_USER_ME:    
@@ -56,7 +47,7 @@ export default (state = initialState, action) => {
 //--------------------------------------------------------------//    
     /////>> MONEY <</////
     case cons.TRANSACTIONS_GET:
-      const balance = getBalance(action.payload)
+      const balance = getBalance(action.payload, state.user)
       return {
         ...state,
         transactions: action.payload,
@@ -65,15 +56,20 @@ export default (state = initialState, action) => {
 //--------------------------------------------------------------//
     /////>> CONTACTS <</////
     case cons.GET_FRIENDS:
-    case cons.ADD_FRIEND:
-    case cons.UPDATE_FRIEND:
-    case cons.DELETE_FRIEND:
       return {
         ...state, 
-        contacts:action.payload
+        contacts: action.payload
+      }
+    case cons.GET_ONE_FRIEND:
+      return {
+        ...state,
+        oneFriend: action.payload
       }
   }
   return state;
 };
+
+
+
 
 

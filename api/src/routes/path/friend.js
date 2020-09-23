@@ -1,6 +1,7 @@
 const estaAutenticado = require("../../Suppliers/authenticateFunction")
 const server = require("express").Router();
-const { User, Contact } = require("../../db.js");
+const { Op } = require("sequelize");
+const { User, Contact, Account } = require("../../db.js");
 
 
 //-----------------------------------------------------------------------------//
@@ -20,36 +21,47 @@ server.post('/add', estaAutenticado, async (req, res) => {
     //-----------------------------------------------------------------------------//
     //                              Filtros                                        //
     //-----------------------------------------------------------------------------//
-    if(!friend)                     res.send('el amigo que queres agregar no existe')
-    else if(me.id === friend.id)    res.send('no podes ser tu propio amigo')
+    if(!friend)                     res.status(404).send('el amigo que queres agregar no existe')
+    else if(me.id === friend.id)    res.status(404).send('no podes ser tu propio amigo')
     
     //----------------------------------//
     //      SI PASA LOS FILTROS         //
     //----------------------------------//
     else{
-        // Si no existe nickName le pongo el nombre completo
-        if(!nickName) nickName = `${friend.firstName} ${friend.lastName}`
+        const existe = await Contact.findOne({
+                where: {
+                    [Op.and]:[
+                        {friend: me.id},
+                        {friended: friend.id}
+                    ]
+            }})
 
-        // Creo el contacto y le paso los valores que necesita
-        Contact.create({
-                friend: me.id,
-                friended: friend.id,
-                nickName
-            })
-            .then((create) => res.send(create))
-            .catch(err => {
-                if(err.name === 'SequelizeUniqueConstraintError') res.send('ya existe este amigo')
-                else res.send(err)
-            })
+        if(existe) res.status(402).send('ya existe este amigo')
+
+        else {
+            // Si no existe nickName le pongo el nombre completo
+            if(!nickName) nickName = `${friend.firstName} ${friend.lastName}`
+    
+            // Creo el contacto y le paso los valores que necesita
+            Contact.create({
+                    friend: me.id,
+                    friended: friend.id,
+                    phoneNumber: friend.phoneNumber,
+                    nickName,
+                    email
+                })
+                .then((create) => res.status(202).send(create))
+                .catch(err => res.status(400).send(err))
+        }
     }
 })
 
 //-----------------------------------------------------------------------------//
 //                        BORRAR AMIGOS                                        //
 //-----------------------------------------------------------------------------//
-server.delete('/delete', estaAutenticado, (req, res) => {
+server.delete('/delete/:idFriend', estaAutenticado, (req, res) => {
     const { id } = req.user; // elimino si estoy autenticado
-    const { idFriend } = req.body;
+    const { idFriend } = req.params;
 
     Contact.destroy({ where: {friend: id, friended:idFriend} })
         .then(destroy => res.send(destroy ? 'se elimino' : 'no se elimino'))
@@ -76,12 +88,30 @@ server.put('/edit', estaAutenticado, (req, res) => {
 //-----------------------------------------------------------------------------//
 //                        LISTAR AMIGOS                                        //
 //-----------------------------------------------------------------------------//
-server.get('/list', estaAutenticado, (req, res) => {
+server.get('/list', estaAutenticado, async (req, res) => {
     const { id } = req.user; // muestro si estoy autenticado
     
-    Contact.findAll({ where: { friend: id } })
-        .then(friends => res.send(friends.length ? friends : 'No tenes Amigos'))
-        .catch(err => res.send(err))    // error 
+    const contacts = await Contact.findAll({ where: { friend: id } })
+
+    if(!contacts) res.send('no tenes amigos')
+    else res.send(contacts)
 })
+
+//-----------------------------------------------------------------------------//
+//                         TRAER AMIGO                                         //
+//-----------------------------------------------------------------------------//
+server.get('/:idFriend', estaAutenticado, async (req, res) => {
+    const { idFriend } = req.params;
+
+    const friend = await User.findByPk(idFriend, {
+                include: [{model: Account, attributes: ['cvu']}],
+                attributes: { exclude: ['password', 'access', 'createdAt', 'updatedAt'] }
+            }
+        )
+
+    if(!friend) res.send('el amigo no existe')
+    else res.send(friend)
+})
+
 
 module.exports = server;
