@@ -2,7 +2,7 @@ import * as cons from "./constants";
 import axios from "axios";
 import { set } from "react-native-reanimated";
 
-const url = "http://134.122.116.30/api/";
+const url = "http://localhost:9000/";
 
 //Llamar en lugar de axios
 //en baseURL ya esta cargada el localhost
@@ -101,6 +101,7 @@ export const transactions_get = () => {
   return (dispatch) => {
     instance.get("transactions/get").then((res) => {
       dispatch({ type: cons.TRANSACTIONS_GET, payload: res.data });
+      console.log(res.data)
     });
   };
 };   
