@@ -85,7 +85,7 @@ server.use(
     res.header("Access-Control-Allow-Methods", "HEAD, GET, POST, PATCH, OPTIONS, PUT, DELETE");
     next();
 }); */
-const whiteList = ['http://localhost:19006','https://www.bankappme.tk/'] 
+/* const whiteList = ['http://localhost:19006'] */
 
 server.use(cors({
     credentials: true,

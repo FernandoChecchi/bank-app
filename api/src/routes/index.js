@@ -24,15 +24,15 @@ const router = Router();
 //-----------------------MIDDLEWARES-ROUTES-----------------------------------//
 //----------------------------------------------------------------------------//
 
-router.use('/api/user/auth', authUserPath)
-router.use('/api/user', userPath)
-router.use('/api/friend', addPath)
-router.use('/api/transactions', transactionsPath)
-router.use('/api/email', emailPath)
+router.use('/user/auth', authUserPath)
+router.use('/user', userPath)
+router.use('/friend', addPath)
+router.use('/transactions', transactionsPath)
+router.use('/email', emailPath)
 
 //--------API-Rest----------//
 
-router.use('/api/api/location', apiLocationPath)
+router.use('/api/location', apiLocationPath)
 
 //-------------------------//
 
