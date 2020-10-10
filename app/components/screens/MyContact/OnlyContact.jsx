@@ -51,7 +51,6 @@ export default ({ route, navigation }) => {
   return (
     <ImageBackground source={Background} style={style.container}>
       <View>      
-        {console.log(friend)}
         {/*///////////-->>>> TITLE <<<<--///////////*/}
         <Text style={style.name}>{nickName}</Text>  
 
@@ -59,7 +58,7 @@ export default ({ route, navigation }) => {
         <View style={style.containerDate}>
 
             {/*///////////--> EMAIL <--///////////*/}
-            <Text style={style.titulo}>Email: {friend.email}</Text> 
+            <Text style={style.titulo}>E-mail: {friend.email}</Text> 
             <Divider style={{ backgroundColor: 'grey', width:280, marginLeft:25 }} />
 
             {/*///////////--> PHONE <--///////////*/}
@@ -67,7 +66,7 @@ export default ({ route, navigation }) => {
             <Divider style={{ backgroundColor: 'grey', width:280, marginLeft:25 } } />
 
             {/*///////////--> DNI <--///////////*/}
-            <Text style={style.titulo}>DNI: {friend.documentNumber}</Text>  
+            <Text style={style.titulo}>ID N°: {friend.documentNumber}</Text>  
             <Divider style={{ backgroundColor: 'grey', width:280, marginLeft:25 } } />
             
             {/*///////////--> CVU <--///////////*/}
@@ -90,7 +89,7 @@ export default ({ route, navigation }) => {
         {sureDelete &&
           <View>
             {/*/////////>> SUB TITLE <<///////////*/}
-            <Text style={style.subTitle}>Are you sure to delete?</Text>
+            <Text style={style.subTitle}>Are you sure you want to delete this contact?</Text>
 
             {/*/////////>> BUTTONS <<///////////*/}
             <View>
@@ -119,7 +118,7 @@ export default ({ route, navigation }) => {
                 })}>
         <View style={style.touch}>
           <Image style={style.ico} source={EnviarDinero} />
-          <Text >Send Money</Text>
+          <Text >SEND MONEY</Text>
         </View>
       </TouchableHighlight>
 

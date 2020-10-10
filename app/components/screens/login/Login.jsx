@@ -58,9 +58,6 @@ export default ({navigation}) => {
         if (!input.password) {
           error.password = '*';
         }
-        else if(!regex_pass.test(input.password)){
-          error.password = '*'
-        }
 
         return error
     }  
@@ -102,11 +99,12 @@ export default ({navigation}) => {
           source={Logo} />
         <View >
           {/*///////////////////////>> EMAIL <<///////////////////////*/}
-            <Text style={style.label}>Email</Text>
+
+        <Text style={style.label}>E-mail</Text>
             <TextInput style={style.inputR} placeholder= 'E-mail' editable name='email' onChange= {hOnCh_Login}/>
 
           {/*///////////////////////>> PASSWORD <<///////////////////////*/}  
-            <Text style={style.label}> Password </Text>
+            <Text style={style.label}>Password </Text>
             <TextInput style={style.inputR} secureTextEntry={true} editable placeholder='Contraseña' name='password' onChange={hOnCh_Login}/>
 
           {/*///////////////////////>> LOGIN <<///////////////////////*/}
@@ -115,17 +113,15 @@ export default ({navigation}) => {
             disabledStyle={style.buttonFalse} 
             disabledTitleStyle={style.buttonTextFalse}
             titleStyle={style.buttonText}
-            buttonStyle={style.button}/>
-
+              buttonStyle={style.button} />           
+                        
             {!auth &&
               <View>
                 <Text>An error occurred when logging in</Text>
                 <Text>Please try again</Text>
               </View>
-            }
-            
-          {/*//////////////////////////////////////////////////////////*/}
-          
+            }     
+
         </View>
       </View>      
     </ImageBackground>

@@ -1,5 +1,5 @@
 ///////////>> MODULES <<////////////
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Image } from 'react-native'
 import { Block, Text, Button } from 'expo-ui-kit'
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer"
@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 ///////////>> SCRIPTS <<////////////
 import * as render from '../../components/imports/AppImports'
-import { logout, get_user__me, transactions_get } from '../../redux/actions'
+import { logout } from '../../redux/actions'
 
 ///////////>> IMGS <<////////////
 import Logo from '../../assets/logo.png'
@@ -22,6 +22,8 @@ import Statistics from '../../assets/estadisticas.png'
 import Recharge from '../../assets/saldo.png'
 import Menu from '../../assets/list.png'
 import Logout from '../../assets/logout.png'
+import Services from '../../assets/servicios.png'
+import Account from '../../assets/cuenta.png'
 
 import styles from "./drawerStyles";
 
@@ -37,21 +39,30 @@ const DrawerContent = props => {
 
     return (
         <DrawerContentScrollView {...props}>
-
             {/*////////////>> IMG <</////////////////*/}
             <Block flex={0.4} margin={20}>
                 <Image source={Logo} style={styles.logo} resizeMode='center'/>
-                <Text title>BankApp</Text>
-                <Text size={9}>Your security, your relax</Text>
+                <Text title>BankApp Me</Text>
+                <Text size={9}>The better way to bank</Text>
             </Block>
             
             {/*////////////>> DRAWER ITEM LIST //////////////////*/}
             <Block>
                 <DrawerItem 
                     label="Main"
-                    labelStyle = {{marginLeft: -20}}
-                    icon={()=>{return (<Image source={Main} style={styles.img}/>)}}
+                    labelStyle = {{marginLeft: -15}}
+                    icon={()=>{return (<Image source={Main} style={styles.img2}/>)}}
                     onPress={()=> props.navigation.navigate("Main", {change, setChange})}
+                />
+
+                <DrawerItem 
+                    label="My Account"
+                    labelStyle = {{marginLeft: -20}}
+                    icon={()=>{return (<Image source={Account} style={styles.img}/>)}}
+                    onPress={()=> props.navigation.navigate("Account", {
+                        name: `${state.user.firstName} ${state.user.lastName}`, 
+                        cvu: state.user.account.cvu
+                    })}
                 />
 
                 <DrawerItem 
@@ -66,8 +77,8 @@ const DrawerContent = props => {
 
                 <DrawerItem 
                     label="Contacts"
-                    labelStyle = {{marginLeft: -20}}
-                    icon={()=>{return (<Image source={MyContacts} style={styles.img}/>)}}
+                    labelStyle = {{marginLeft: -15}}
+                    icon={()=>{return (<Image source={MyContacts} style={styles.img2}/>)}}
                     onPress={()=> props.navigation.navigate("MyContact",{chng: setChange, total: state.fullBalance?.total})}
                 />
 
@@ -82,7 +93,9 @@ const DrawerContent = props => {
                     label="Transactions"
                     labelStyle = {{marginLeft: -20}}
                     icon={()=>{return (<Image source={Transactions} style={styles.img}/>)}}
-                    onPress={()=> props.navigation.navigate("Transactions")}
+                    onPress={()=> props.navigation.navigate("Transactions", {
+                        user: state.user
+                    })}
                 />
 
                 <DrawerItem 
@@ -90,6 +103,13 @@ const DrawerContent = props => {
                     labelStyle = {{marginLeft: -20}}
                     icon={()=>{return (<Image source={Recharge} style={styles.img}/>)}}
                     onPress={()=> props.navigation.navigate("Recharge", {chng: setChange})}
+                />
+
+                <DrawerItem 
+                    label="Pay Services"
+                    labelStyle = {{marginLeft: -20}}
+                    icon={()=>{return (<Image source={Services} style={styles.img}/>)}}
+                    onPress={()=> props.navigation.navigate("PayService", {chng: setChange})}
                 />
 
                 <DrawerItem 
@@ -113,7 +133,7 @@ const DrawerContent = props => {
             </Block>
 
             {/*/////////////>> LOGOUT <<//////////////*/}
-            <Block>
+            <Block style={{marginTop: 80}}>
                 <DrawerItem 
                     label="Logout"
                     labelStyle = {{marginLeft: -20}}
@@ -124,7 +144,6 @@ const DrawerContent = props => {
                     }}
                 />
             </Block>
-
         </DrawerContentScrollView>
     )
 }
@@ -136,15 +155,13 @@ const Screens = ({navigation})=>{
         headerTitle: null,
         headerLeft: ()=>(
             <Button primary padding color={"#f7b700"} marginHorizontal onPress={()=>{navigation.openDrawer()}}>
-                <Image source={{
-                    uri: Menu,
-                    height:20,
-                    width:20,                    
-                }}/>
+                <Image source={Menu} style={styles.img}/>
             </Button>
         )
     }}>
-
+        
+        
+        {/*options={{headerShown: false}} */}
         {/*/////////////////////>> HOME <</////////////////////*/}
         <Stack.Screen name="Home" component={render.Home} options={{headerShown: false}}/>{/* NOT HEADER */}
 
@@ -155,7 +172,9 @@ const Screens = ({navigation})=>{
         <Stack.Screen name="Code" component={render.Code} options={{headerLeft:
             ()=> (<HeaderBackButton color="#f7b700"  onPress={()=>{navigation.navigate('Register')}}/>)
         }}/>{/* BACK TO REGISTER */}
+        
         <Stack.Screen name="Register Info" component={render.Register_One} options={{headerShown:false}}/>{/* NOT HEADER */}
+
         <Stack.Screen name="Next Register" component={render.Register_Two} options={{headerLeft:
             ()=> (<HeaderBackButton color="#f7b700"  onPress={()=>{navigation.navigate('Register Info')}}/>)
         }}/>{/* BACK TO REGISTER INFO */}
@@ -167,6 +186,7 @@ const Screens = ({navigation})=>{
 
         {/*/////////////////////>> MAIN <</////////////////////*/}
         <Stack.Screen name="Main" component={render.Main}/>
+        
         {/*///////-> TRANSACTIONS <-////////*/}
         <Stack.Screen name="Transactions" component={render.Transactions}/>
         
@@ -204,11 +224,15 @@ const Screens = ({navigation})=>{
         <Stack.Screen name="Recharge" component={render.Recharge}/>
         <Stack.Screen name='ValidateCharge' component={render.ValidateCharge}/>
 
+        {/*///////-> PAY SERVICE <-////////*/}
+        <Stack.Screen name="PayService" component={render.PayService}/>
+
         {/*///////-> SEND MONEY <-////////*/}
         <Stack.Screen name="Send Money to Contacts" component={render.SendMoneyContacts}/>
         <Stack.Screen name="Send Money" component={render.SendMoney} options={{headerLeft:
             ()=> (<HeaderBackButton color="#f7b700" onPress={()=>{navigation.navigate('Send Money to Contacts')}}/>)
         }}/>{/* BACK TO Send Money to Contacts */}
+
 
     </Stack.Navigator>)
 }
@@ -218,8 +242,8 @@ export default () => {
     <Drawer.Navigator 
     initialRouteName="Home" 
     drawerType="slide"
-    overlayColor="transparent"
-    drawerStyle={{width: "55%", backgroundColor: "#f7b700"}}
+    overlayColor="#0000005F"
+    drawerStyle={{width: "56%", backgroundColor: "#f7b700"}}
     contentContainerStyle={{flex: 1}}
     sceneContainerStyle={{backgroundColor: 'red'}}
     drawerContent={props => <DrawerContent {...props}/>}>

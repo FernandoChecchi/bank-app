@@ -7,10 +7,9 @@ import styles from "./styles/AccountStyle";
 
 ////////////>> IMGS <<//////////
 import Background from "../../../assets/background.png";
-import AssociateCVU from "../../../assets/asociarcvu.png"
 import ShareCVU from "../../../assets/compartircvu.png"
 
-export default ({ route, navigation }) => {
+export default ({ route }) => {
 
   /////////>> PARAMS <<///////////
   const { name, cvu } = route.params
@@ -42,20 +41,11 @@ export default ({ route, navigation }) => {
 
         {/*/////////////>> BUTTONS <<///////////////*/}
         <View style={styles.row}>
-
-          {/*/////------->> ASSOCIATE CVU <<-------////*/}   
-          <TouchableHighlight onPress={() => navigation.navigate("")}>
-            <View style={styles.touch}>
-              <Image style={styles.ico} source={AssociateCVU} />
-              <Text style={styles.small}>Associate CVU</Text>
-            </View>
-          </TouchableHighlight>
-
           {/*/////------->> SHARE CVU <<-------////*/} 
           <TouchableHighlight onPress={ copyToClipboard }>        
             <View style={styles.touch}>
               <Image style={styles.ico} source={ShareCVU} />
-              <Text style={styles.small}>Share cvu</Text>
+              <Text style={styles.small}>Share CVU</Text>
             </View>
           </TouchableHighlight>
         </View>      

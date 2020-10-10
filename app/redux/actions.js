@@ -4,7 +4,6 @@ import { set } from "react-native-reanimated";
 
 const url = "https://bankappme.tk/api/";
 
-
 //Llamar en lugar de axios
 //en baseURL ya esta cargada el localhost
 //al llamarla hay que hacer Ej.: instance.post('user/register')
@@ -34,7 +33,6 @@ export const location_get = (location, newUser, setNewUser, error, setError, set
   return ()=>{
     instance.post('api/location/get', location)
       .then(res => {
-        console.log(res)
         
         ///////---> SET ADDRESS <------////
 
@@ -57,9 +55,15 @@ export const location_get = (location, newUser, setNewUser, error, setError, set
 
 ///////>> REGISTER <<////////
 export const register_user__post = async (user, setRegister, setLoading)=>{
+  try{
     const res = await instance.post('user/auth/register', user)    
     setRegister(true)
     setLoading(false)
+  }
+  catch(err){
+    console.log(err)
+  }
+    
 }
 
 //##############>>> ¡LOGIN! <<<##############//
@@ -72,6 +76,7 @@ export const login_user__post = async (user, setAuth, setLoading) => {
     setLoading(false)
   }
   catch(err){
+    console.log(err)
     setAuth(false)
     setLoading(false)
   }  
@@ -80,16 +85,16 @@ export const login_user__post = async (user, setAuth, setLoading) => {
 ///////>> GET USER <<////////
 export const get_user__me = () => {
   return (dispatch) => {
-    instance.get("user/auth/me").then((res) => {
-      dispatch({ type: cons.GET_USER_ME, payload: res.data });
-    });
+      instance.get("user/auth/me").then((res) => {
+        dispatch({ type: cons.GET_USER_ME, payload: res.data });
+      }); 
   };
 };
 
 ///////>> LOGOUT <<////////
 export const logout = () => {
   return (dispatch) => {
-    instance.get("user/auth/logout").then((res) => {
+    instance.post("user/auth/logout").then((res) => {
       dispatch({ type: cons.LOGOUT, payload: undefined });
     });
   };
@@ -102,7 +107,6 @@ export const transactions_get = () => {
   return (dispatch) => {
     instance.get("transactions/get").then((res) => {
       dispatch({ type: cons.TRANSACTIONS_GET, payload: res.data });
-      console.log(res.data)
     });
   };
 };   
@@ -115,6 +119,27 @@ export const send_money = async (CVUfriend, transaction, setChange) => {
   }
   catch(err){
     console.log(err)
+  }
+}
+
+///////>> PAY SERVICE <<////////
+export const pay_service = async (balance, setChange) => {
+  try {
+    const res = await instance.put('transactions/pay/service', balance)
+    setChange(true)
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+
+///////>> SERVICE <<////////
+export const get_service = () =>{
+  return (dispatch) =>{
+    instance.get('transactions/get/services')
+    .then(res =>{
+      dispatch({type: cons.GET_SERVICE, payload: res.data})
+    })
   }
 }
 
@@ -143,7 +168,6 @@ export const get_friends = () => {
 
 //////>> GET ONE CONTACT <<//////
 export const get_one_friend = (idFriend) => {
-  console.log(idFriend)
   return (dispatch) => {
     instance.get(`friend/${idFriend}`)
       .then(res => {
@@ -180,7 +204,7 @@ export const delete_friend = (idFriend) => {
 /////////>> EDIT USER <<//////////
 export const edit_user = async (user, id, setChange) => {
   try{
-    await instance.put(`user/edit/${id}`, user)
+    const res = await instance.put(`user/edit/${id}`, user)
     setChange(true)
   }
   catch(err){

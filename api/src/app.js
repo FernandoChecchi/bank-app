@@ -25,8 +25,6 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
     passReqToCallback: true
     },(req, email, password, done) => {
-//        console.log(email)
-//        console.log(password)
         User.findOne({ where:{ email } })
             .then(user => {
                 if(!user) 
@@ -62,7 +60,7 @@ passport.deserializeUser((id, done) => {
 //-------------------------------//
 server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
-server.use(morgan("dev"));
+server.use(morgan("common"));
 server.use(cookieParser());
 server.use(
     session({
@@ -85,11 +83,11 @@ server.use(
     res.header("Access-Control-Allow-Methods", "HEAD, GET, POST, PATCH, OPTIONS, PUT, DELETE");
     next();
 }); */
-/* const whiteList = ['http://localhost:19006'] */
+ const whiteList = ['http://localhost:19006', 'https://bankappme.tk/', 'https://www.bankappme.tk/']; 
 
 server.use(cors({
     credentials: true,
-    origin: 'http://localhost:19006',
+    origin: whiteList,
     allowedHeaders: "Origin, X-Requested-With, Content-Type, X-Auth-Token, X-PINGOTHER, Accept",
     methods: "GET,HEAD,PUT,PATCH,OPTIONS,POST,DELETE"
 }))

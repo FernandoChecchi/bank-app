@@ -31,8 +31,6 @@ server.post("/to/:CVUfriend", estaAutenticado, async (req, res) => {
     const floatBalance = Number(userFromWallet.dataValues.balance)
     //-------------------------------------------
 
-    console.log(userTo)
-
     let nuevoSaldo;
 
     if(!userFromAccount) 
@@ -58,6 +56,8 @@ server.post("/to/:CVUfriend", estaAutenticado, async (req, res) => {
         await Transaction.create({
             debit: userFromAccount.accountId, 
             deposit: userToAccount.accountId, 
+            debitName: `${userFrom.dataValues.firstName} ${userFrom.dataValues.lastName}`,
+            depositName: `${userTo.dataValues.firstName} ${userTo.dataValues.lastName}`,
             name: `${capitalize(userData.firstName)} ${capitalize(userData.lastName)}`,
             value: floatTransaction
         })
@@ -68,7 +68,6 @@ server.post("/to/:CVUfriend", estaAutenticado, async (req, res) => {
         await userToWallet.update({
                 balance:(Number(userToWallet.dataValues.balance) + floatTransaction)
             })
-        
 
         res.send(nuevoSaldo.dataValues)
     }
@@ -102,7 +101,8 @@ server.put('/pay/service', estaAutenticado, async (req, res) => {
             { 
                 debit: userAccount.accountId, 
                 deposit: exist.id,
-                name: exist.name,
+                debitName: `${userAccount.firstName} ${userAccount.lastName}`,
+                depositName: exist.name,
                 value: balance, 
                 transactions_type: 'transferencia bancaria'
             })
@@ -157,7 +157,6 @@ server.get('/get', estaAutenticado, async (req, res) => {
                 {deposit: userAccount.accountId }
             ]
         }
-
     })
         .then(transactions=>res.send(transactions))
         .catch(err=>res.send(err))
