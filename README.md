@@ -5,8 +5,11 @@
 <p align='left'>
   <img src='https://user-images.githubusercontent.com/65245824/95641384-58f90480-0a78-11eb-8a50-35b02188c28c.png' </img>
 </p>
+
 # Billetera Virtual
 Billetera Virtual realizado en equipo como parte de instancia evaluativa en [Soy Henry](https://www.soyhenry.com/)
+
+
 Deployada en Digital Ocean en [Bank App](https://www.bankappme.tk/)
 
 ## Construido con 🛠️   
