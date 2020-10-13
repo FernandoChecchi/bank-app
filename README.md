@@ -25,7 +25,6 @@ Deployada en Digital Ocean en [Bank App](https://www.bankappme.tk/)
 ## Contributors 🚀
 
 * [Tomas Benjamin Vasquez](https://github.com/tomas0011)
-* [Fernando Checchi](https://github.com/FernandoChecchi)
 * [Matias Ruiz](https://github.com/matiasruizmdz)
 * [María de la Paz Casaux](https://github.com/paz873107)
 * [Javier Eduardo Sosa Fuch](https://github.com/Zoaxx1)
